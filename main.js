@@ -1,6 +1,6 @@
 function startrecording(){
   v = document.getElementsByTagName("video");
-  let mixer = new MultiStreamsMixer([v[1].captureStream(),v[2].captureStream()]);
+  let mixer = new MultiStreamsMixer([v[0].captureStream(),v[1].captureStream()]);
   mixer.startDrawingFrames();
   let recorder = RecordRTC(mixer.getMixedStream(), {
     type: 'video'
