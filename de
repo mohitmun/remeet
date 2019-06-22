@@ -1,0 +1,14 @@
+v = document.getElementsByTagName("video");
+let mixer = new MultiStreamsMixer([v[0].captureStream(),v[1].captureStream()]);
+mixer.startDrawingFrames();let recorder = RecordRTC(mixer.getMixedStream(), {
+  type: 'video'
+});
+recorder.startRecording();
+
+const sleep = m => new Promise(r => setTimeout(r, m));
+await sleep(10000);
+
+recorder.stopRecording(function() {
+  let blob = recorder.getBlob();
+  invokeSaveAsDialog(blob);
+});

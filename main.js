@@ -317,6 +317,8 @@
           console.log("create")
           var params = serializeFormData();
           if (validator(params, fields)) {
+            console.log("wow");
+            console.log(JSON.stringify(params));
             join(rtc, params);
           }
         })
@@ -348,3 +350,4 @@
           }
         })
       })
+join(rtc, {"appID":"678731aa56674937a8fcc4fabb6c9115","channel":"123","Token":"","uid":"","cameraId":"f95c9ca184b68a67b6558f31923652d1bed00c00007f01b47d50bd5094be3572","microphoneId":"default","mode":"live","codec":"h264"})
