@@ -1,11 +1,13 @@
 function startrecording(){
   v = document.getElementsByTagName("video");
-  let mixer = new MultiStreamsMixer([v[1].captureStream(),v[2].captureStream()]);
+  window.mixer = new MultiStreamsMixer([v[1].captureStream(),v[2].captureStream()]);
   mixer.startDrawingFrames();
-  let recorder = RecordRTC(mixer.getMixedStream(), {
+  let mixedStream =  mixer.getMixedStream();
+  let recorder = RecordRTC(mixedStream, {
     type: 'video'
   });
   recorder.startRecording();
+  startAudioRecording(mixedStream);
   window.recorder = recorder;
 }
       console.log("agora sdk version: " + AgoraRTC.VERSION + " compatible: " + AgoraRTC.checkSystemRequirements());
@@ -295,6 +297,34 @@ function startrecording(){
           Toast.error("leave success");
           console.error(err);
         })
+      }
+
+      function startAudioRecording(remoteStream_){
+        if (remoteStream_ != null) {
+          if (this.wavesurfer_ == null) {
+            var parent = this;
+            this.wavesurfer_ = Object.create(WaveSurfer);
+            this.wavesurfer_.init({
+                container: '#waveform',
+                waveColor: '#fff'
+            });
+            this.wavesurferStream_ = Object.create(WaveSurfer.Streamer);
+            this.wavesurferStream_.init({
+                wavesurfer: this.wavesurfer_
+            });
+            // start the microphone
+            this.wavesurferStream_.start(remoteStream_);
+            this.audioWaveIconSet_.on();
+        } else {
+            if (this.wavesurferStream_ != null) {
+                this.wavesurferStream_.destroy();
+                this.wavesurferStream_ = null;
+            }
+            this.wavesurfer_.destroy();
+            this.wavesurfer_ = null;
+            this.audioWaveIconSet_.off();
+          }
+        }
       }
   
       $(function () {
