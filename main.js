@@ -1,4 +1,13 @@
-
+function startrecording(){
+  v = document.getElementsByTagName("video");
+  let mixer = new MultiStreamsMixer([v[1].captureStream(),v[2].captureStream()]);
+  mixer.startDrawingFrames();
+  let recorder = RecordRTC(mixer.getMixedStream(), {
+    type: 'video'
+  });
+  recorder.startRecording();
+  window.recorder = recorder;
+}
       console.log("agora sdk version: " + AgoraRTC.VERSION + " compatible: " + AgoraRTC.checkSystemRequirements());
       function getDevices (next) {
         AgoraRTC.getDevices(function (items) {
@@ -94,6 +103,7 @@
           addView(id);
           remoteStream.play("remote_video_" + id);
           Toast.info('stream-subscribed remote-uid: ' + id);
+          startrecording();
           console.log('stream-subscribed remote-uid: ', id);
         })
         // Occurs when the remote stream is removed; for example, a peer user calls Client.unpublish.
@@ -348,6 +358,12 @@
           if (validator(params, fields)) {
             leave(rtc);
           }
+          window.recorder.stopRecording(function() {
+            let blob = window.recorder.getBlob();
+            //invokeSaveAsDialog(blob);
+
+            $("#recording").attr("src" , window.URL.createObjectURL(blob));
+          });
         })
       })
 //join(rtc, {"appID":"678731aa56674937a8fcc4fabb6c9115","channel":"123","Token":"","uid":"","cameraId":"f95c9ca184b68a67b6558f31923652d1bed00c00007f01b47d50bd5094be3572","microphoneId":"default","mode":"live","codec":"h264"})
