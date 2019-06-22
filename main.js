@@ -361,7 +361,7 @@ function startrecording(){
           window.recorder.stopRecording(function() {
             let blob = window.recorder.getBlob();
             //invokeSaveAsDialog(blob);
-
+            $("#recording").show();
             $("#recording").attr("src" , window.URL.createObjectURL(blob));
           });
         })
