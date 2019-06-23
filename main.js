@@ -1,5 +1,85 @@
+recognition = new webkitSpeechRecognition();
+recognition.continuous = true;
+function startTranscribe() {
+    recognition.onstart = function () {
+        console.info("started recognition");
+    };
+    recognition.onerror = function (event) {
+        console.error(event.error);
+    };
+    recognition.onresult = function (event) {
+        console.log(event);
+        var final_transcript = "";
+        if (typeof event.results == "undefined") {
+            recognition.onend = null;
+            recognition.stop();
+            upgrade();
+            return;
+        }
+        for (var i = event.resultIndex; i < event.results.length; ++i) {
+            if (event.results[i].isFinal) {
+                final_transcript += event.results[i][0].transcript;
+            }
+            else {
+                interim_transcript += event.results[i][0].transcript;
+            }
+        }
+        window.messages.push({me:true, text: final_transcript })
+        renderChat()
+        if (window.chatChannel == undefined)
+            return;
+        console.log("sending data to chat channel " + final_transcript);
+        window.chatChannel.messageChannelSend(JSON.stringify({
+            resultIndex: event.resultIndex,
+            final_transcript: final_transcript,
+        }));
+    };
+    recognition.start();
+}
+
+
+function signalInit(channel_id) {
+    signalClient = Signal("678731aa56674937a8fcc4fabb6c9115")
+    //session = signalClient.login(channel_id, "1234");
+
+    session.onLoginSuccess = function (uid) {
+      var channel = session.channelJoin("chat");
+      console.log("login success");
+      channel.onChannelJoined = function () {
+      console.log("chall joined success");
+        window.chatChannel = channel;
+        window.chatChannel.messageChannelSend(JSON.stringify({
+            init: true,
+        }));
+        channel.onMessageChannelReceive = function (account, uid, msg) {
+            console.log("received data to chat channel " + msg);
+            console.log(account, uid, msg);
+            const payload = JSON.parse(msg);
+            window.messages.push() 
+            //addTranscribe(payload.resultIndex, account, payload.interim_transcript || payload.final_transcript, account === name);
+        };
+      };
+    };
+    session.onLogout = function (ecode) {
+        /* Set the onLogout callback. */
+    };
+}
+
+function renderChat() {
+  final_html = ""
+  for (message of window.messages) {
+    console.log(message);
+    if(message.me){
+      html = '<div class="d-flex justify-content-end mb-4"> <div class="img_cont_msg"> </div> <div class="msg_cotainer"> '+ message.text + '  <span class="msg_time">8:40 AM, Today</span> </div> </div>'
+    }else{
+      html = '<div class="d-flex justify-content-start mb-4"> <div class="img_cont_msg"> </div> <div class="msg_cotainer"> '+message.text+' <span class="msg_time">8:40 AM, Today</span> </div> </div>'
+    }
+    final_html = final_html + html
+  }
+  $(".card-body.msg_card_body").html(final_html)
+}
 function startrecording(){
-  v = document.getElementsByTagName("video");
+  v = $("#video video");
   let mixer = new MultiStreamsMixer([v[0].captureStream(),v[1].captureStream()]);
   mixer.startDrawingFrames();
   let recorder = RecordRTC(mixer.getMixedStream(), {
@@ -103,7 +183,10 @@ function startrecording(){
           addView(id);
           remoteStream.play("remote_video_" + id);
           Toast.info('stream-subscribed remote-uid: ' + id);
+          window.messages = []
           startrecording();
+          startTranscribe();
+          signalInit(rtc.client.channel)
           console.log('stream-subscribed remote-uid: ', id);
         })
         // Occurs when the remote stream is removed; for example, a peer user calls Client.unpublish.
