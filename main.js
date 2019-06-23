@@ -92,7 +92,7 @@ $(document).on("click", "#questions", function(){
 
 $(document).on("click", "#stats", function(){
   console.log("click stats");
-  renderChat(/^[0-9]*/);
+  renderChat(/[0-9]/);
 })
 
 $(document).on("click", "#todo", function(){
@@ -103,7 +103,14 @@ $(document).on("click", "#todo", function(){
 
 function renderChat(regex) {
   final_html = ""
-  for (message_key in window.messages) {
+sorted_messages = window.messages.sort(function(a, b){
+    var keyA = a.timestamp
+        keyB = b.timestamp
+    if(keyA < keyB) return -1;
+    if(keyA > keyB) return 1;
+    return 0;
+});
+  for (message_key in sorted_messages) {
     message = window.messages[message_key]
     if(message.text == undefined){
       continue
@@ -115,9 +122,9 @@ function renderChat(regex) {
     }
     console.log("message is " + message);
     if(message.me){
-      html = '<div data-ts=' + message.timestamp + ' class="jumptovid d-flex justify-content-end mb-4"> <div class="img_cont_msg"> </div> <div class="msg_cotainer_send"> '+ message.text + '  <span class="msg_time">8:40 AM, Today</span> </div> </div>'
+      html = '<div data-ts=' + message.timestamp + ' class="jumptovid d-flex justify-content-end mb-4"> <div class="img_cont_msg"> </div> <div class="msg_cotainer_send"> '+ message.text + '  <span class="msg_time"></span> </div> </div>'
     }else{
-      html = '<div data-ts=' + message.timestamp + ' class="jumptovid d-flex justify-content-start mb-4"> <div class="img_cont_msg"> </div> <div class="msg_cotainer"> '+message.text+' <span class="msg_time">8:40 AM, Today</span> </div> </div>'
+      html = '<div data-ts=' + message.timestamp + ' class="jumptovid d-flex justify-content-start mb-4"> <div class="img_cont_msg"> </div> <div class="msg_cotainer"> '+message.text+' <span class="msg_time"></span> </div> </div>'
     }
     if (message.text != undefined){
       final_html = final_html + html
@@ -142,7 +149,7 @@ function updateTags(){
         //continue;
       }
 
-      if(message.text.match(/.*[0-9].*/)){
+      if(message.text.match(/[0-9]/)){
         s = s + 1
         //continue;
       }
