@@ -1,113 +1,126 @@
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
+
 <!DOCTYPE html>
-<html lang="en">
+<html>
+	<head>
+		<title>Chat</title>
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.3.1/sandstone/bootstrap.min.css" rel="stylesheet" integrity="sha384-G3Fme2BM4boCE9tHx9zHvcxaQoAkksPQa/8oyn1Dzqv7gdcXChereUsXGx6LtbqA" crossorigin="anonymous">
+		<link rel="stylesheet" href="demo.css">
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.js"></script>
+    <script src="https://unpkg.com/wavesurfer.js"></script>
+	</head>
+	<!--Coded With Love By Mutiullah Samim-->
+	<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#">Remeet</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Basic Communication</title>
-  <!-- <link rel="stylesheet" href="./vendor/toastify.min.css"> -->
-  <!-- <link rel="stylesheet" href="./vendor/bootstrap-material-design.min.css"> -->
-  <script src="https://www.webrtc-experiment.com/MultiStreamsMixer.js"></script>
-  <link rel="stylesheet" href="./assets/common.css">
-</head>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Previous Meetings</a>
+      </li>
 
-<body>
-    <nav class="navbar navbar-light fixed-top agora-primary-bg">
-        <h5>Basic Communication</h5>
-      </nav>
-      <form id="form">
-        <div class="custom-container container">
-          <div class="row">
-            <div class="custom-row-container">
-              <div class="row">
-                <div class="col-ms">
-                  <div class="card custom-card">
-                    <div class="form-group">
-                      <label for="appID" class="bmd-label-floating">App ID*</label>
-                      <input type="text" class="form-control" name="appID" id="appID">
-                    </div>
-                    <div class="form-group bmd-form-group">
-                      <label for="channel" class="bmd-label-floating">Channel*</label>
-                      <input type="text" class="form-control" name="channel" id="channel">
-                    </div>
-                    <div class="form-group bmd-form-group">
-                      <label for="token" class="bmd-label-floating">Token</label>
-                      <input type="text" class="form-control" name="Token" id="token">
-                    </div>
-                    <div class="form-group bmd-form-group">
-                      <button id="join" type="button" class="btn btn-raised btn-primary agora-primary-bg">JOIN</button>
-                      <button id="leave" type="button" class="btn btn-raised btn-primary agora-primary-bg">LEAVE</button>
-                      <button id="publish" type="button"
-                        class="btn btn-raised btn-primary agora-primary-bg">PUBLISH</button>
-                      <button id="unpublish" type="button"
-                        class="btn btn-raised btn-primary agora-primary-bg">UNPUBLISH</button>
-                    </div>
-                  </div>
-                  <div class="card">
-                    <button class="btn btn-raised agora-expand-btn" id="settings" data-toggle="collapse"
-                      data-target="#setting-collapse" aria-expanded="false" aria-controls="collapse">
-                      Advanced Settings
-                    </button>
-                    <div id="setting-collapse" class="collapse" aria-labelledby="setting-collapse">
-                      <div class="card-body">
-                        <div class="form-group">
-                          <label for="uid" class="bmd-label-floating">UID</label>
-                          <input type="text" class="form-control" name="uid" id="uid">
-                        </div>
-                        <div class="form-group">
-                          <label for="cameraId" class="bmd-label-floating">CAMERA</label>
-                          <select class="form-control" id="cameraId" name="cameraId">
-                          </select>
-                        </div>
-                        <div class="form-group">
-                          <label for="microphoneId" class="bmd-label-floating">MICROPHONE</label>
-                          <select class="form-control" id="microphoneId" name="microphoneId">
-                          </select>
-                        </div>
-                        <div class="form-group">
-                          <label for="mode">Mode</label>
-                          <div class="row radio-list">
-                            <div class="radio">
-                              <label>
-                                <input type="radio" name="mode" value="rtc" >
-                                <span class="radio-label">rtc</span>
-                              </label>
-                            </div>
-                            <div class="radio">
-                              <label>
-                                <input type="radio" name="mode" value="live" checked>
-                                <span class="radio-label">live</span>
-                              </label>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="form-group">
-                          <label for="mode">Codec</label>
-                          <div class="row radio-list">
-                            <div class="radio">
-                              <label>
-                                <input type="radio" name="codec" value="vp8">
-                                <span class="radio-label">vp8</span>
-                              </label>
-                            </div>
-                            <div class="radio">
-                              <label>
-                                <input type="radio" name="codec" value="h264" checked>
-                                <span class="radio-label">h264</span>
-                              </label>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Settings</a>
+      </li>
+     
+    </ul>
+    <form class="form-inline my-2 my-lg-0">
+        <input type="text" class="form-control" name="channel" id="channel">
+                <button id="join" type="button" class="btn btn-raised btn-primary  btn-lg   "> <i class="glyphicon glyphicon-plus"></i>join</button> &nbsp;&nbsp;&nbsp;
+                <button id="leave" type="button" class="btn btn-raised btn-primary btn-lg ">LEAVE</button>
     
-                  </div>
+    </form>
+  </div>
+</nav>
+
+    
+		<div class="container-fluid h-100">
+			<div class="row justify-content-center h-100">
+				<div class="col-md-8 col-xl-8 chat"><div class="card mb-sm-3 mb-md-0 contacts_card">
+
+            <video controls id="recording" style="display:none">
+
+            </video>
+              <div class="video-grid" id="video">
+                <div id="local_stream" class="video-placeholder">
+                  <div id="local_video_info" class="video-info"></div>
                 </div>
               </div>
-            </div>
+              <div id="waveform"></div>
+				</div></div>
+				<div class="col-md-4 col-xl-4 chat">
+          <br><br><br>
+          <div>
+            <a href="#" class="btn btn-raised btn-primary btn-lg">
+              <span>Questions</span>
+              <span class="badge notification">0</span>
+            </a>
+            <a href="#" class="btn btn-raised btn-primary btn-lg">
+              <span>Stats</span>
+              <span class="badge notification">0</span>
+            </a>
+            <a href="#" class="btn btn-raised btn-primary btn-lg">
+              <span>Bookmarks</span>
+              <span class="badge notification">0</span>
+            </a>
           </div>
-      </form>
+					<div class="card">
+						<div class="card-header msg_head">
+							<div class="d-flex bd-highlight">
+                <div class="topnav">
+                  <input type="text" placeholder="Search..">
+                </div>
+								<!--<div class="video_cam">-->
+									<!--<span><i class="fas fa-video"></i></span>-->
+									<!--<span><i class="fas fa-phone"></i></span>-->
+								<!--</div>-->
+							</div>
+							<!--<span id="action_menu_btn"><i class="fas fa-ellipsis-v"></i></span>-->
+							<div class="action_menu">
+								<ul>
+									<li><i class="fas fa-user-circle"></i> View profile</li>
+									<li><i class="fas fa-users"></i> Add to close friends</li>
+									<li><i class="fas fa-plus"></i> Add to group</li>
+									<li><i class="fas fa-ban"></i> Block</li>
+								</ul>
+							</div>
+						</div>
+						<div class="card-body msg_card_body">
+								</div>
+							</div>
+							<div class="d-flex justify-content-start mb-4">
+								
+						</div>
+						<div class="card-footer">
+							<div class="input-group">
+								<div class="input-group-append">
+									<span class="input-group-text attach_btn"><i class="fas fa-paperclip"></i></span>
+								</div>
+								<textarea name="" class="form-control type_msg" placeholder="Type your message..."></textarea>
+								<div class="input-group-append">
+									<span class="input-group-text send_btn"><i class="fas fa-location-arrow"></i></span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
   <script src="vendor/jquery.min.js"></script>
   <script src="vendor/popper.min.js"></script>
   <script src="vendor/toastify.js"></script>
@@ -115,7 +128,8 @@
   <script src="assets/AgoraRTCSDK-2.6.1.js"></script>
   <script src="assets/common.js"></script>
   <script src="https://www.WebRTC-Experiment.com/RecordRTC.js"></script>
-  <script src="main.js"> </script>
-</body>
+  <script src="agora_signal.js"></script>
 
+  <script src="main.js"> </script>
+	</body>
 </html>
