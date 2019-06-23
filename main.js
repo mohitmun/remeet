@@ -1,5 +1,7 @@
 recognition = new webkitSpeechRecognition();
 recognition.continuous = true;
+recognition.lang = "en-IN";
+recognition.interimResults = true;
 function startTranscribe() {
     recognition.onstart = function () {
         console.info("started recognition");
@@ -10,6 +12,7 @@ function startTranscribe() {
     recognition.onresult = function (event) {
         console.log(event);
         var final_transcript = "";
+        var interim_transcript = "";
         if (typeof event.results == "undefined") {
             recognition.onend = null;
             recognition.stop();
@@ -54,8 +57,8 @@ function signalInit(channel_id) {
             console.log("received data to chat channel " + msg);
             console.log(account, uid, msg);
             const payload = JSON.parse(msg);
-            window.messages.push({text: payload.final_transcript, clientId: payload.clientId}) 
 
+            window.messages.push({text:payload.interim_transcript || payload.final_transcript , clientId: payload.clientId, timestamp: +new Date()}) 
             renderChat()
             //addTranscribe(payload.resultIndex, account, payload.interim_transcript || payload.final_transcript, account === name);
         };
@@ -180,6 +183,11 @@ function startrecording(){
               console.log("stream subscribe failed", err);
             })
           }
+                    window.messages = []
+          startrecording();
+          startTranscribe();
+          signalInit(rtc.client.clientId)
+
           console.log('stream-added remote-uid: ', id);
         });
         // Occurs when a user subscribes to a remote stream.
