@@ -61,7 +61,7 @@ function signalInit(channel_id) {
             console.log(account, uid, msg);
             const payload = JSON.parse(msg);
             if (payload.clientId != rtc.client.clientId){
-              window.messages[payload.clientId +""+ payload.resultIndex] = {text:payload.interim_transcript || payload.final_transcript , clientId: payload.clientId, timestamp: payload.clientId, me: rtc.client.clientId == payload.clientId}
+              window.messages[payload.clientId +""+ payload.resultIndex] = {text:payload.interim_transcript || payload.final_transcript , clientId: payload.clientId, timestamp: payload.timestamp, me: rtc.client.clientId == payload.clientId}
               renderChat()
             }
             //addTranscribe(payload.resultIndex, account, payload.interim_transcript || payload.final_transcript, account === name);
