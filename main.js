@@ -24,14 +24,13 @@ function startTranscribe() {
                 interim_transcript += event.results[i][0].transcript;
             }
         }
-        window.messages.push({me:true, text: final_transcript })
-        renderChat()
         if (window.chatChannel == undefined)
             return;
         console.log("sending data to chat channel " + final_transcript);
         window.chatChannel.messageChannelSend(JSON.stringify({
             resultIndex: event.resultIndex,
             final_transcript: final_transcript,
+            clientId: rtc.client.clientId,
         }));
     };
     recognition.start();
@@ -40,7 +39,7 @@ function startTranscribe() {
 
 function signalInit(channel_id) {
     signalClient = Signal("678731aa56674937a8fcc4fabb6c9115")
-    //session = signalClient.login(channel_id, "1234");
+    session = signalClient.login(channel_id, "_no_need_token");
 
     session.onLoginSuccess = function (uid) {
       var channel = session.channelJoin("chat");
@@ -55,11 +54,14 @@ function signalInit(channel_id) {
             console.log("received data to chat channel " + msg);
             console.log(account, uid, msg);
             const payload = JSON.parse(msg);
-            window.messages.push() 
+            window.messages.push({text: payload.final_transcript, clientId: payload.clientId}) 
+
+            renderChat()
             //addTranscribe(payload.resultIndex, account, payload.interim_transcript || payload.final_transcript, account === name);
         };
       };
     };
+
     session.onLogout = function (ecode) {
         /* Set the onLogout callback. */
     };
@@ -69,7 +71,7 @@ function renderChat() {
   final_html = ""
   for (message of window.messages) {
     console.log(message);
-    if(message.me){
+    if(message.clientId == rtc.client.clientId){
       html = '<div class="d-flex justify-content-end mb-4"> <div class="img_cont_msg"> </div> <div class="msg_cotainer"> '+ message.text + '  <span class="msg_time">8:40 AM, Today</span> </div> </div>'
     }else{
       html = '<div class="d-flex justify-content-start mb-4"> <div class="img_cont_msg"> </div> <div class="msg_cotainer"> '+message.text+' <span class="msg_time">8:40 AM, Today</span> </div> </div>'
@@ -186,7 +188,7 @@ function startrecording(){
           window.messages = []
           startrecording();
           startTranscribe();
-          signalInit(rtc.client.channel)
+          signalInit(rtc.client.clientId)
           console.log('stream-subscribed remote-uid: ', id);
         })
         // Occurs when the remote stream is removed; for example, a peer user calls Client.unpublish.
