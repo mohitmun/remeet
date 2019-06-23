@@ -89,6 +89,11 @@ $(document).on("click", "#questions", function(){
 })
 
 
+$(document).on("click", "#stats", function(){
+  console.log("click stats");
+  renderChat(/^[0-9]*/);
+})
+
 
 function renderChat(regex) {
   final_html = ""
