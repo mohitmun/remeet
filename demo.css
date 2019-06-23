@@ -150,8 +150,9 @@
 		margin-bottom: auto;
 		margin-left: 10px;
 		border-radius: 25px;
-		background-color: #82ccdd;
+		background-color: #248e5d;
 		padding: 10px;
+    color: white;
 		position: relative;
 	}
 	.msg_cotainer_send{
@@ -159,9 +160,10 @@
 		margin-bottom: auto;
 		margin-right: 10px;
 		border-radius: 25px;
-		background-color: #ffffff5c;
+		background-color: #325d88;
 		padding: 10px;
-		position: relative;
+		color:white;
+    position: relative;
 	}
 	.msg_time{
 		position: absolute;
@@ -223,13 +225,13 @@
 	}
 	}
 	.notification {
-  background-color: #82ccdd;
+  background-color: red;
   color: white;
   text-decoration: none;
-  padding: 15px 26px;
+  padding: 10px 15px;
   position: relative;
   display: inline-block;
-  border-radius: 2px;
+  border-radius: 30px;
 }
 
 .notification:hover {

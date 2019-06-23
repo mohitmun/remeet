@@ -10,7 +10,7 @@ function startTranscribe() {
         console.error(event.error);
     };
     recognition.onresult = function (event) {
-        console.log(event);
+        console.log("new event recognition:" + event);
         var final_transcript = "";
         var interim_transcript = "";
         if (typeof event.results == "undefined") {
@@ -107,7 +107,7 @@ function renderChat(regex) {
         continue;
       }
     }
-    console.log(message);
+    console.log("message is " + message);
     if(message.me){
       html = '<div data-ts=' + message.timestamp + ' class="jumptovid d-flex justify-content-end mb-4"> <div class="img_cont_msg"> </div> <div class="msg_cotainer_send"> '+ message.text + '  <span class="msg_time">8:40 AM, Today</span> </div> </div>'
     }else{
@@ -134,7 +134,6 @@ function startrecording(){
   window.recorder = recorder;
   } catch (e) {
     /* handle error */
-    console.log("FUCKKKKK");
   }
 }
       console.log("agora sdk version: " + AgoraRTC.VERSION + " compatible: " + AgoraRTC.checkSystemRequirements());
