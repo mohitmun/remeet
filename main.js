@@ -120,6 +120,28 @@ function renderChat(regex) {
   $(".card-body.msg_card_body").html(final_html)
   ele = $(".card-body.msg_card_body")[0];
   ele.scrollTop = ele.scrollHeight;
+  updateTags()
+}
+function updateTags(){
+  q = 0
+  s = 0
+  for (message_key in window.messages) {
+    message = window.messages[message_key]
+    if(message.text == undefined){
+      continue
+    }
+      if(message.text.match(/\what?|who?|when?|where|how?|why\b/)){
+        q = q + 1
+        //continue;
+      }
+
+      if(message.text.match(/.*[0-9].*/)){
+        s = s + 1
+        //continue;
+      }
+  }
+  $("#questiontag").text(q)
+  $("#statstag").text(s)
 }
 function startrecording(){
   v = $("#video video");
