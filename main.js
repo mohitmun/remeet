@@ -72,7 +72,7 @@ function renderChat() {
   for (message of window.messages) {
     console.log(message);
     if(message.clientId == rtc.client.clientId){
-      html = '<div class="d-flex justify-content-end mb-4"> <div class="img_cont_msg"> </div> <div class="msg_cotainer"> '+ message.text + '  <span class="msg_time">8:40 AM, Today</span> </div> </div>'
+      html = '<div class="d-flex justify-content-end mb-4"> <div class="img_cont_msg"> </div> <div class="msg_cotainer_send"> '+ message.text + '  <span class="msg_time">8:40 AM, Today</span> </div> </div>'
     }else{
       html = '<div class="d-flex justify-content-start mb-4"> <div class="img_cont_msg"> </div> <div class="msg_cotainer"> '+message.text+' <span class="msg_time">8:40 AM, Today</span> </div> </div>'
     }
@@ -82,7 +82,12 @@ function renderChat() {
 }
 function startrecording(){
   v = $("#video video");
-  let mixer = new MultiStreamsMixer([v[0].captureStream(),v[1].captureStream()]);
+  try {
+    mixer = new MultiStreamsMixer([v[0].captureStream(),v[1].captureStream()]);
+  } catch (e) {
+    /* handle error */
+    console.log("FUCKKKKK");
+  }
   mixer.startDrawingFrames();
   let recorder = RecordRTC(mixer.getMixedStream(), {
     type: 'video'
