@@ -30,7 +30,7 @@ function startTranscribe() {
         if (window.chatChannel == undefined)
             return;
         console.log("sending data to chat channel " + final_transcript);
-        window.messages[rtc.client.clientId + ""+ event.resultIndex] = {text:interim_transcript || final_transcript , clientId: rtc.client.clientId, timestamp: +new Date()}
+        window.messages[rtc.client.clientId + ""+ event.resultIndex] = {text:interim_transcript || final_transcript , clientId: rtc.client.clientId, timestamp: +new Date(), me: true}
         renderChat()
         window.chatChannel.messageChannelSend(JSON.stringify({
             resultIndex: event.resultIndex,
@@ -60,7 +60,7 @@ function signalInit(channel_id) {
             console.log(account, uid, msg);
             const payload = JSON.parse(msg);
             if (payload.clientId != rtc.client.clientId){
-              window.messages[payload.clientId +""+ payload.resultIndex] = {text:payload.interim_transcript || payload.final_transcript , clientId: payload.clientId, timestamp: +new Date()}
+              window.messages[payload.clientId +""+ payload.resultIndex] = {text:payload.interim_transcript || payload.final_transcript , clientId: payload.clientId, timestamp: +new Date(), me: rtc.client.clientId == payload.clientId}
               renderChat()
             }
             //addTranscribe(payload.resultIndex, account, payload.interim_transcript || payload.final_transcript, account === name);
@@ -86,13 +86,16 @@ function renderChat(regex) {
   final_html = ""
   for (message_key in window.messages) {
     message = window.messages[message_key]
+    if(message.text == undefined){
+      continue
+    }
     if(regex != undefined){
       if(!message.text.match(regex)){
         continue;
       }
     }
     console.log(message);
-    if(message.clientId == rtc.client.clientId){
+    if(message.me){
       html = '<div data-ts=' + message.timestamp + ' class="jumptovid d-flex justify-content-end mb-4"> <div class="img_cont_msg"> </div> <div class="msg_cotainer_send"> '+ message.text + '  <span class="msg_time">8:40 AM, Today</span> </div> </div>'
     }else{
       html = '<div data-ts=' + message.timestamp + ' class="jumptovid d-flex justify-content-start mb-4"> <div class="img_cont_msg"> </div> <div class="msg_cotainer"> '+message.text+' <span class="msg_time">8:40 AM, Today</span> </div> </div>'
