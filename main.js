@@ -82,6 +82,14 @@ $(document).on("click", ".jumptovid", function(){
 $(document).on("keydown", "#search", function(){
   renderChat($(this).val());
 })
+
+$(document).on("click", "#questions", function(){
+  console.log("click questions");
+  renderChat(/\what?|who?|when?|where|how?|why\b/);
+})
+
+
+
 function renderChat(regex) {
   final_html = ""
   for (message_key in window.messages) {

@@ -38,11 +38,69 @@
       </li>
      
     </ul>
-    <form class="form-inline my-2 my-lg-0">
+    <form id="form" class="form-inline my-2 my-lg-0">
         <input type="text" class="form-control" name="channel" id="channel">
                 <button id="join" type="button" class="btn btn-raised btn-primary  btn-lg   "> <i class="glyphicon glyphicon-plus"></i>join</button> &nbsp;&nbsp;&nbsp;
                 <button id="leave" type="button" class="btn btn-raised btn-primary btn-lg ">LEAVE</button>
+    <div class="cad" style="display: none">
+                  <button class="btn btn-raised agora-expand-btn" id="settings" data-toggle="collapse"
+                    data-target="#setting-collapse" aria-expanded="false" aria-controls="collapse">
+                    Advanced Settings
+                  </button>
+                  <div id="setting-collapse" class="collapse" aria-labelledby="setting-collapse">
+                    <div class="card-body">
+                      <div class="form-group">
+                        <label for="uid" class="bmd-label-floating">UID</label>
+                        <input type="text" class="form-control" name="uid" id="uid">
+                      </div>
+                      <div class="form-group">
+                        <label for="cameraId" class="bmd-label-floating">CAMERA</label>
+                        <select class="form-control" id="cameraId" name="cameraId">
+                        </select>
+                      </div>
+                      <div class="form-group">
+                        <label for="microphoneId" class="bmd-label-floating">MICROPHONE</label>
+                        <select class="form-control" id="microphoneId" name="microphoneId">
+                        </select>
+                      </div>
+                      <div class="form-group">
+                        <label for="mode">Mode</label>
+                        <div class="row radio-list">
+                          <div class="radio">
+                            <label>
+                              <input type="radio" name="mode" value="rtc" >
+                              <span class="radio-label">rtc</span>
+                            </label>
+                          </div>
+                          <div class="radio">
+                            <label>
+                              <input type="radio" name="mode" value="live" checked>
+                              <span class="radio-label">live</span>
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label for="mode">Codec</label>
+                        <div class="row radio-list">
+                          <div class="radio">
+                            <label>
+                              <input type="radio" name="codec" value="vp8">
+                              <span class="radio-label">vp8</span>
+                            </label>
+                          </div>
+                          <div class="radio">
+                            <label>
+                              <input type="radio" name="codec" value="h264" checked>
+                              <span class="radio-label">h264</span>
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
     
+                </div>
     </form>
   </div>
 </nav>
@@ -65,15 +123,15 @@
 				<div class="col-md-4 col-xl-4 chat">
           <br><br><br>
           <div>
-            <a href="#" class="btn btn-raised btn-primary btn-lg">
+            <a id="questions" class="btn btn-raised btn-primary btn-lg">
               <span>Questions</span>
               <span class="badge notification">0</span>
             </a>
-            <a href="#" class="btn btn-raised btn-primary btn-lg">
+            <a id="stats" class="btn btn-raised btn-primary btn-lg">
               <span>Stats</span>
               <span class="badge notification">0</span>
             </a>
-            <a href="#" class="btn btn-raised btn-primary btn-lg">
+            <a id="bookmarks" class="btn btn-raised btn-primary btn-lg">
               <span>Bookmarks</span>
               <span class="badge notification">0</span>
             </a>
@@ -82,7 +140,7 @@
 						<div class="card-header msg_head">
 							<div class="d-flex bd-highlight">
                 <div class="topnav">
-                  <input type="text" placeholder="Search..">
+                  <input type="text" id="search" placeholder="Search..">
                 </div>
 								<!--<div class="video_cam">-->
 									<!--<span><i class="fas fa-video"></i></span>-->
