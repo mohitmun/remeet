@@ -102,6 +102,8 @@ function renderChat(regex) {
     }
   }
   $(".card-body.msg_card_body").html(final_html)
+  ele = $(".card-body.msg_card_body")[0];
+  ele.scrollTop = ele.scrollHeight;
 }
 function startrecording(){
   v = $("#video video");
