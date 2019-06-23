@@ -30,6 +30,8 @@ function startTranscribe() {
         if (window.chatChannel == undefined)
             return;
         console.log("sending data to chat channel " + final_transcript);
+        window.messages[rtc.client.clientId + ""+ event.resultIndex] = {text:interim_transcript || final_transcript , clientId: rtc.client.clientId, timestamp: +new Date()}
+        renderChat()
         window.chatChannel.messageChannelSend(JSON.stringify({
             resultIndex: event.resultIndex,
             final_transcript: final_transcript,
@@ -57,9 +59,10 @@ function signalInit(channel_id) {
             console.log("received data to chat channel " + msg);
             console.log(account, uid, msg);
             const payload = JSON.parse(msg);
-
-            window.messages.push({text:payload.interim_transcript || payload.final_transcript , clientId: payload.clientId, timestamp: +new Date()}) 
-            renderChat()
+            if (payload.clientId != rtc.client.clientId){
+              window.messages[payload.clientId +""+ payload.resultIndex] = {text:payload.interim_transcript || payload.final_transcript , clientId: payload.clientId, timestamp: +new Date()}
+              renderChat()
+            }
             //addTranscribe(payload.resultIndex, account, payload.interim_transcript || payload.final_transcript, account === name);
         };
       };
@@ -69,17 +72,25 @@ function signalInit(channel_id) {
         /* Set the onLogout callback. */
     };
 }
-
+$(document).on("click", ".jumptovid", function(){
+  console.log("ts: " + parseInt($(this).data("ts")));
+  console.log("record start " + window.record_start);
+  $("#recording")[0].currentTime = (parseInt($(this).data("ts")) - window.record_start) / 1000;
+  $("#recording")[0].play()
+})
 function renderChat() {
   final_html = ""
-  for (message of window.messages) {
+  for (message_key in window.messages) {
+    message = window.messages[message_key]
     console.log(message);
     if(message.clientId == rtc.client.clientId){
-      html = '<div class="d-flex justify-content-end mb-4"> <div class="img_cont_msg"> </div> <div class="msg_cotainer_send"> '+ message.text + '  <span class="msg_time">8:40 AM, Today</span> </div> </div>'
+      html = '<div data-ts=' + message.timestamp + ' class="jumptovid d-flex justify-content-end mb-4"> <div class="img_cont_msg"> </div> <div class="msg_cotainer_send"> '+ message.text + '  <span class="msg_time">8:40 AM, Today</span> </div> </div>'
     }else{
-      html = '<div class="d-flex justify-content-start mb-4"> <div class="img_cont_msg"> </div> <div class="msg_cotainer"> '+message.text+' <span class="msg_time">8:40 AM, Today</span> </div> </div>'
+      html = '<div data-ts=' + message.timestamp + ' class="jumptovid d-flex justify-content-start mb-4"> <div class="img_cont_msg"> </div> <div class="msg_cotainer"> '+message.text+' <span class="msg_time">8:40 AM, Today</span> </div> </div>'
     }
-    final_html = final_html + html
+    if (message.text != undefined){
+      final_html = final_html + html
+    }
   }
   $(".card-body.msg_card_body").html(final_html)
 }
@@ -87,16 +98,17 @@ function startrecording(){
   v = $("#video video");
   try {
     mixer = new MultiStreamsMixer([v[0].captureStream(),v[1].captureStream()]);
-  } catch (e) {
-    /* handle error */
-    console.log("FUCKKKKK");
-  }
+
   mixer.startDrawingFrames();
   let recorder = RecordRTC(mixer.getMixedStream(), {
     type: 'video'
   });
   recorder.startRecording();
   window.recorder = recorder;
+  } catch (e) {
+    /* handle error */
+    console.log("FUCKKKKK");
+  }
 }
       console.log("agora sdk version: " + AgoraRTC.VERSION + " compatible: " + AgoraRTC.checkSystemRequirements());
       function getDevices (next) {
@@ -184,8 +196,6 @@ function startrecording(){
             })
           }
                     window.messages = []
-          startrecording();
-          startTranscribe();
           signalInit(rtc.client.clientId)
 
           console.log('stream-added remote-uid: ', id);
@@ -200,6 +210,7 @@ function startrecording(){
           Toast.info('stream-subscribed remote-uid: ' + id);
           window.messages = []
           startrecording();
+          window.record_start = +new Date();
           startTranscribe();
           signalInit(rtc.client.clientId)
           console.log('stream-subscribed remote-uid: ', id);
