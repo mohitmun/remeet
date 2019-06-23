@@ -443,9 +443,16 @@ function startrecording(){
           }
           window.recorder.stopRecording(function() {
             let blob = window.recorder.getBlob();
+            var urlobj =  window.URL.createObjectURL(blob);
             //invokeSaveAsDialog(blob);
             $("#recording").show();
-            $("#recording").attr("src" , window.URL.createObjectURL(blob));
+            $("#recording").attr("src" , urlobj);
+            var wavesurfer = WaveSurfer.create({
+              container: '#waveform',
+              waveColor: 'violet',
+              progressColor: 'purple'
+            });
+            wavesurfer.load(urlobj);
           });
         })
       })

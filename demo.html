@@ -14,22 +14,22 @@
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.js"></script>
+    <script src="https://unpkg.com/wavesurfer.js"></script>
 	</head>
 	<!--Coded With Love By Mutiullah Samim-->
 	<body>
 
     <nav class="navbar navbar-light fixed-top agora-primary-bg">
-        <h5 style="color: aliceblue;">Remeet</h5>
+        <h5 style="color: aliceblue;" class="notification">Remeet</h5>
 
       <form id="form">
         <div class="custom-container container">
           <div class="row">
             <div class="custom-row-container">
               <div class="row">
-                <label for="channel" class="bmd-label-floating">Channel*</label>
                 <input type="text" class="form-control" name="channel" id="channel">
-                <button id="join" type="button" class="btn btn-raised btn-primary agora-primary-bg">JOIN</button>
-                <button id="leave" type="button" class="btn btn-raised btn-primary agora-primary-bg">LEAVE</button>
+                <button id="join" type="button" class="btn btn-raised btn-primary agora-primary-bg notification badge ">JOIN</button>
+                <button id="leave" type="button" class="btn btn-raised btn-primary agora-primary-bg notification badge">LEAVE</button>
                 <div class="cad" style="display: none">
                   <button class="btn btn-raised agora-expand-btn" id="settings" data-toggle="collapse"
                     data-target="#setting-collapse" aria-expanded="false" aria-controls="collapse">
@@ -106,15 +106,30 @@
                   <div id="local_video_info" class="video-info"></div>
                 </div>
               </div>
+              <div id="waveform"></div>
 				</div></div>
 				<div class="col-md-4 col-xl-4 chat">
+          <br><br><br>
+          <div>
+            <a href="#" class="notification">
+              <span>Questions</span>
+              <span class="badge">3</span>
+            </a>
+            <a href="#" class="notification">
+              <span>Numbers/Figure</span>
+              <span class="badge">2</span>
+            </a>
+            <a href="#" class="notification">
+              <span>Bookmarks</span>
+              <span class="badge">4</span>
+            </a>
+          </div>
 					<div class="card">
 						<div class="card-header msg_head">
 							<div class="d-flex bd-highlight">
-								<div class="user_info">
-									<span>Chat with Maryam Naz</span>
-									<p>1767 Messages</p>
-								</div>
+                <div class="topnav">
+                  <input type="text" placeholder="Search..">
+                </div>
 								<!--<div class="video_cam">-->
 									<!--<span><i class="fas fa-video"></i></span>-->
 									<!--<span><i class="fas fa-phone"></i></span>-->
