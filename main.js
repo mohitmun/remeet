@@ -78,10 +78,19 @@ $(document).on("click", ".jumptovid", function(){
   $("#recording")[0].currentTime = (parseInt($(this).data("ts")) - window.record_start) / 1000;
   $("#recording")[0].play()
 })
-function renderChat() {
+
+$(document).on("keydown", "#search", function(){
+  renderChat($(this).val());
+})
+function renderChat(regex) {
   final_html = ""
   for (message_key in window.messages) {
     message = window.messages[message_key]
+    if(regex != undefined){
+      if(!message.text.match(regex)){
+        continue;
+      }
+    }
     console.log(message);
     if(message.clientId == rtc.client.clientId){
       html = '<div data-ts=' + message.timestamp + ' class="jumptovid d-flex justify-content-end mb-4"> <div class="img_cont_msg"> </div> <div class="msg_cotainer_send"> '+ message.text + '  <span class="msg_time">8:40 AM, Today</span> </div> </div>'
