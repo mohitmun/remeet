@@ -94,6 +94,11 @@ $(document).on("click", "#stats", function(){
   renderChat(/^[0-9]*/);
 })
 
+$(document).on("click", "#todo", function(){
+  console.log("click todotag");
+  renderChat(/please do/);
+})
+
 
 function renderChat(regex) {
   final_html = ""
@@ -125,6 +130,7 @@ function renderChat(regex) {
 function updateTags(){
   q = 0
   s = 0
+  t = 0
   for (message_key in window.messages) {
     message = window.messages[message_key]
     if(message.text == undefined){
@@ -139,9 +145,15 @@ function updateTags(){
         s = s + 1
         //continue;
       }
+
+      if(message.text.toLowerCase().match(/please do/)){
+        t = t + 1
+        //continue;
+      }
   }
   $("#questiontag").text(q)
   $("#statstag").text(s)
+  $("#todotag").text(t)
 }
 function startrecording(){
   v = $("#video video");
