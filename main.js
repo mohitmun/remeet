@@ -89,6 +89,10 @@ $(document).on("click", "#questions", function(){
   renderChat(/\what?|who?|when?|where|how?|why\b/);
 })
 
+$(document).on("click", "#chat", function(){
+  console.log("Chat");
+  renderChat(/.*/);
+})
 
 $(document).on("click", "#stats", function(){
   console.log("click stats");
